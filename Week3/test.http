@@ -1,0 +1,63 @@
+GET http://localhost:3000/user-api/users
+###
+
+POST http://localhost:3000/user-api/users
+Content-Type: application/json
+
+{
+    "id":100,
+    "name":"sidhvi",
+    "age":19
+}
+###
+
+PUT http://localhost:3000/user-api/users
+Content-Type: application/json
+
+{
+    "id":200,
+    "name":"sid",
+    "age":20
+}
+
+
+### Read a user by ID
+GET http://localhost:3000/user-api/users/100
+###
+DELETE http://localhost:3000/user-api/users/100
+###===========================================================================================================
+###Create products API in the same file
+###create this API to get all products
+GET http://localhost:3000/product-api/products 
+###
+###create this API to get product by ID
+POST http://localhost:3000/product-api/products
+Content-Type: application/json
+
+{
+    "productId":1,
+    "name":"laptop",
+    "price":50000,
+    "brand":"dell"
+}
+###
+GET http://localhost:3000/product-api/products-id/1
+###
+###create this API to get product by brand
+GET http://localhost:3000/product-api/products-brand/dell
+###
+###create this API to add new product
+
+###create this API to update product by ID
+PUT http://localhost:3000/product-api/products/1
+Content-Type: application/json
+
+{
+    "productId":1,
+    "name":"laptop",
+    "price":45000,
+    "brand":"HP"
+}
+###
+###create this API to delete product by ID
+DELETE http://localhost:3000/product-api/products/1
