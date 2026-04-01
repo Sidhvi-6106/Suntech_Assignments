@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { apiFetch } from "../lib/api";
 
 function AddUser() {
   const {
@@ -16,11 +17,11 @@ function AddUser() {
 
   //form submit
   const onUserCreate = async (newUser) => {
-    //console.log(newUser);
+    setError(null);
     setLoading(true);
-    // make HTTP POST req to create new user
+
     try {
-      let res = await fetch("http://localhost:4000/user-api/users", {
+      let res = await apiFetch("/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -29,14 +30,12 @@ function AddUser() {
       });
 
       if (res.status === 201) {
-        //user created it shd navigate to users list
         navigate("/users-list");
       } else {
-        console.log(res)
-        throw new Error("error occurred");
+        const errorResponse = await res.json().catch(() => null);
+        throw new Error(errorResponse?.message || "Unable to create user");
       }
     } catch (err) {
-      console.log(err)
       setError(err);
     } finally {
       setLoading(false);
@@ -54,16 +53,28 @@ function AddUser() {
   return (
     <div className="text-center">
       <h1 className="text-5xl text-gray-600">Add New User</h1>
-      {/* Create user form */}
       <form onSubmit={handleSubmit(onUserCreate)} className="max-w-96 mx-auto mt-10">
-        <input type="text" {...register("name")} className="mb-5 border w-full text-2xl" placeholder="Name" />
-        <input type="email" {...register("email")} className="mb-5 border w-full text-2xl" placeholder="Email" />
+        <input
+          type="text"
+          {...register("name", { required: "Name is required" })}
+          className="mb-5 border w-full text-2xl"
+          placeholder="Name"
+        />
+        {errors.name && <p className="mb-4 text-left text-red-500">{errors.name.message}</p>}
+        <input
+          type="email"
+          {...register("email", { required: "Email is required" })}
+          className="mb-5 border w-full text-2xl"
+          placeholder="Email"
+        />
+        {errors.email && <p className="mb-4 text-left text-red-500">{errors.email.message}</p>}
         <input
           type="date"
-          {...register("dateOfBirth")}
+          {...register("dateOfBirth", { required: "Date of birth is required" })}
           className="mb-5 border w-full text-2xl"
           placeholder="Date of birth"
         />
+        {errors.dateOfBirth && <p className="mb-4 text-left text-red-500">{errors.dateOfBirth.message}</p>}
         <input
           type="number"
           {...register("mobileNumber")}

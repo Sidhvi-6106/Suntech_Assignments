@@ -1,26 +1,32 @@
 import { useEffect, useState } from "react";
-import {useNavigate} from 'react-router'
+import { useNavigate } from "react-router";
+import { apiFetch } from "../lib/api";
 
 function UsersList() {
   let [users, setUsers] = useState([]);
-  let navigate=useNavigate()
+  let [loading, setLoading] = useState(true);
+  let [error, setError] = useState(null);
+  let navigate = useNavigate();
 
   useEffect(() => {
     async function getUsers() {
       try {
-        let res = await fetch("http://localhost:4000/user-api/users", {
+        setError(null);
+        let res = await apiFetch("/users", {
           method: "GET",
         });
 
         if (res.status === 200) {
-          //extract json data
           let resObj = await res.json();
-          //update the state
           setUsers(resObj.payload);
         } else {
+          const errorResponse = await res.json().catch(() => null);
+          throw new Error(errorResponse?.message || "Unable to load users");
         }
       } catch (err) {
-        //set error
+        setError(err);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -29,8 +35,16 @@ function UsersList() {
 
 
   //go to user
-  const gotoUser=(userObj)=>{
-    navigate("/user",{state:{user:userObj}})
+  const gotoUser = (userObj) => {
+    navigate(`/user/${userObj._id}`, { state: { user: userObj } });
+  };
+
+  if (loading) {
+    return <p className="text-center text-orange-400 text-3xl">Loading users...</p>;
+  }
+
+  if (error) {
+    return <p className="text-center text-red-400 text-3xl">{error.message}</p>;
   }
 
   return (
