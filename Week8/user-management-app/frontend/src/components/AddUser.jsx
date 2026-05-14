@@ -21,12 +21,19 @@ function AddUser() {
     setLoading(true);
 
     try {
+      const payload = { ...newUser };
+      if (payload.mobileNumber === "") {
+        delete payload.mobileNumber;
+      } else if (payload.mobileNumber) {
+        payload.mobileNumber = Number(payload.mobileNumber);
+      }
+
       let res = await apiFetch("/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newUser),
+        body: JSON.stringify(payload),
       });
 
       if (res.status === 201) {
@@ -51,40 +58,49 @@ function AddUser() {
   }
 
   return (
-    <div className="text-center">
-      <h1 className="text-5xl text-gray-600">Add New User</h1>
-      <form onSubmit={handleSubmit(onUserCreate)} className="max-w-96 mx-auto mt-10">
-        <input
-          type="text"
-          {...register("name", { required: "Name is required" })}
-          className="mb-5 border w-full text-2xl"
-          placeholder="Name"
-        />
-        {errors.name && <p className="mb-4 text-left text-red-500">{errors.name.message}</p>}
-        <input
-          type="email"
-          {...register("email", { required: "Email is required" })}
-          className="mb-5 border w-full text-2xl"
-          placeholder="Email"
-        />
-        {errors.email && <p className="mb-4 text-left text-red-500">{errors.email.message}</p>}
-        <input
-          type="date"
-          {...register("dateOfBirth", { required: "Date of birth is required" })}
-          className="mb-5 border w-full text-2xl"
-          placeholder="Date of birth"
-        />
-        {errors.dateOfBirth && <p className="mb-4 text-left text-red-500">{errors.dateOfBirth.message}</p>}
-        <input
-          type="number"
-          {...register("mobileNumber")}
-          className="mb-5 border w-full text-2xl"
-          placeholder="Mobile number"
-        />
-        <button type="submit" className="text-2xl bg-lime-400 text-lime-50 px-8 py-4">
-          Add User
-        </button>
-      </form>
+    <div className="max-w-md mx-auto mt-10">
+      <div className="bg-slate-800/50 backdrop-blur-sm p-8 rounded-2xl border border-slate-700 shadow-xl">
+        <h1 className="text-4xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 text-center">Add New User</h1>
+        <form onSubmit={handleSubmit(onUserCreate)} className="flex flex-col gap-6">
+          <div>
+            <input
+              type="text"
+              {...register("name", { required: "Name is required" })}
+              className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all placeholder-slate-500"
+              placeholder="Full Name"
+            />
+            {errors.name && <p className="mt-2 text-sm text-red-400">{errors.name.message}</p>}
+          </div>
+          <div>
+            <input
+              type="email"
+              {...register("email", { required: "Email is required" })}
+              className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all placeholder-slate-500"
+              placeholder="Email Address"
+            />
+            {errors.email && <p className="mt-2 text-sm text-red-400">{errors.email.message}</p>}
+          </div>
+          <div>
+            <input
+              type="date"
+              {...register("dateOfBirth", { required: "Date of birth is required" })}
+              className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all placeholder-slate-500 [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert"
+            />
+            {errors.dateOfBirth && <p className="mt-2 text-sm text-red-400">{errors.dateOfBirth.message}</p>}
+          </div>
+          <div>
+            <input
+              type="number"
+              {...register("mobileNumber")}
+              className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all placeholder-slate-500"
+              placeholder="Mobile Number (Optional)"
+            />
+          </div>
+          <button type="submit" className="w-full mt-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-cyan-500/30 transition-all transform hover:-translate-y-1">
+            Create User
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

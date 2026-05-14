@@ -5,9 +5,9 @@ import { Outlet } from "react-router";
 
 function RootLayout() {
   return (
-    <div>
+    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col font-sans">
       <Header />
-      <div className="min-h-screen mx-20 mt-20">
+      <div className="flex-grow container mx-auto px-4 py-8">
         <Outlet />
       </div>
       <Footer />
