@@ -59,44 +59,44 @@ function AddUser() {
 
   return (
     <div className="max-w-md mx-auto mt-10">
-      <div className="bg-slate-800/50 backdrop-blur-sm p-8 rounded-2xl border border-slate-700 shadow-xl">
-        <h1 className="text-4xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 text-center">Add New User</h1>
+      <div className="bg-neutral-900 border border-neutral-800 p-8 rounded-2xl">
+        <h1 className="text-4xl font-bold mb-8 text-white text-center">Add New User</h1>
         <form onSubmit={handleSubmit(onUserCreate)} className="flex flex-col gap-6">
           <div>
             <input
               type="text"
               {...register("name", { required: "Name is required" })}
-              className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all placeholder-slate-500"
+              className="w-full bg-black border border-neutral-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-1 focus:ring-white transition-all placeholder-neutral-500"
               placeholder="Full Name"
             />
-            {errors.name && <p className="mt-2 text-sm text-red-400">{errors.name.message}</p>}
+            {errors.name && <p className="mt-2 text-sm text-red-500">{errors.name.message}</p>}
           </div>
           <div>
             <input
               type="email"
               {...register("email", { required: "Email is required" })}
-              className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all placeholder-slate-500"
+              className="w-full bg-black border border-neutral-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-1 focus:ring-white transition-all placeholder-neutral-500"
               placeholder="Email Address"
             />
-            {errors.email && <p className="mt-2 text-sm text-red-400">{errors.email.message}</p>}
+            {errors.email && <p className="mt-2 text-sm text-red-500">{errors.email.message}</p>}
           </div>
           <div>
             <input
               type="date"
               {...register("dateOfBirth", { required: "Date of birth is required" })}
-              className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all placeholder-slate-500 [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert"
+              className="w-full bg-black border border-neutral-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-1 focus:ring-white transition-all placeholder-neutral-500 [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert"
             />
-            {errors.dateOfBirth && <p className="mt-2 text-sm text-red-400">{errors.dateOfBirth.message}</p>}
+            {errors.dateOfBirth && <p className="mt-2 text-sm text-red-500">{errors.dateOfBirth.message}</p>}
           </div>
           <div>
             <input
               type="number"
               {...register("mobileNumber")}
-              className="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all placeholder-slate-500"
+              className="w-full bg-black border border-neutral-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-1 focus:ring-white transition-all placeholder-neutral-500"
               placeholder="Mobile Number (Optional)"
             />
           </div>
-          <button type="submit" className="w-full mt-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-cyan-500/30 transition-all transform hover:-translate-y-1">
+          <button type="submit" className="w-full mt-4 bg-white hover:bg-neutral-200 text-black font-bold py-4 rounded-xl transition-all transform hover:-translate-y-1">
             Create User
           </button>
         </form>
