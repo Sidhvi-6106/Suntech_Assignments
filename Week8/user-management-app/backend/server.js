@@ -18,15 +18,21 @@ const allowedOrigins = (process.env.CLIENT_ORIGIN || "http://localhost:5173")
   .map((origin) => origin.trim())
   .filter(Boolean);
 
-app.use(
-  cors({
-    origin(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
+app.set("trust proxy", 1);
 
-      return callback(new Error("CORS origin is not allowed"));
-    },
+app.use(
+  cors((req, callback) => {
+    const requestOrigin = `${req.protocol}://${req.get("host")}`;
+
+    callback(null, {
+      origin(origin, corsCallback) {
+        if (!origin || origin === requestOrigin || allowedOrigins.includes(origin)) {
+          return corsCallback(null, true);
+        }
+
+        return corsCallback(new Error("CORS origin is not allowed"));
+      },
+    });
   }),
 );
 app.use(exp.json());
