@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { apiFetch } from "../lib/api";
+import API from "../utils/api";
 
 function AddUser() {
   const {
@@ -28,45 +28,33 @@ function AddUser() {
         payload.mobileNumber = Number(payload.mobileNumber);
       }
 
-      let res = await apiFetch("/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (res.status === 201) {
-        navigate("/users-list");
-      } else {
-        const errorResponse = await res.json().catch(() => null);
-        throw new Error(errorResponse?.message || "Unable to create user");
-      }
+      await API.post("/users", payload);
+      navigate("/users-list");
     } catch (err) {
-      setError(err);
+      setError(err.response?.data || { message: "Unable to create user" });
     } finally {
       setLoading(false);
     }
   };
 
   if (loading) {
-    return <p className="text-center text-orange-400 text-3xl"> Loading...</p>;
+    return <p className="text-center text-emerald-600 text-3xl mt-10">Loading...</p>;
   }
 
   if (error) {
-    return <p className="text-center text-red-400 text-3xl"> {error.message}</p>;
+    return <p className="text-center text-red-500 text-3xl mt-10">{error.message}</p>;
   }
 
   return (
     <div className="max-w-md mx-auto mt-10">
-      <div className="bg-neutral-900 border border-neutral-800 p-8 rounded-2xl">
-        <h1 className="text-4xl font-bold mb-8 text-white text-center">Add New User</h1>
+      <div className="bg-white border border-slate-200 shadow-sm p-8 rounded-2xl">
+        <h1 className="text-4xl font-bold mb-8 text-slate-800 text-center">Add New User</h1>
         <form onSubmit={handleSubmit(onUserCreate)} className="flex flex-col gap-6">
           <div>
             <input
               type="text"
               {...register("name", { required: "Name is required" })}
-              className="w-full bg-black border border-neutral-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-1 focus:ring-white transition-all placeholder-neutral-500"
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all placeholder-slate-400"
               placeholder="Full Name"
             />
             {errors.name && <p className="mt-2 text-sm text-red-500">{errors.name.message}</p>}
@@ -75,7 +63,7 @@ function AddUser() {
             <input
               type="email"
               {...register("email", { required: "Email is required" })}
-              className="w-full bg-black border border-neutral-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-1 focus:ring-white transition-all placeholder-neutral-500"
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all placeholder-slate-400"
               placeholder="Email Address"
             />
             {errors.email && <p className="mt-2 text-sm text-red-500">{errors.email.message}</p>}
@@ -84,7 +72,7 @@ function AddUser() {
             <input
               type="date"
               {...register("dateOfBirth", { required: "Date of birth is required" })}
-              className="w-full bg-black border border-neutral-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-1 focus:ring-white transition-all placeholder-neutral-500 [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert"
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all placeholder-slate-400"
             />
             {errors.dateOfBirth && <p className="mt-2 text-sm text-red-500">{errors.dateOfBirth.message}</p>}
           </div>
@@ -92,11 +80,11 @@ function AddUser() {
             <input
               type="number"
               {...register("mobileNumber")}
-              className="w-full bg-black border border-neutral-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-1 focus:ring-white transition-all placeholder-neutral-500"
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all placeholder-slate-400"
               placeholder="Mobile Number (Optional)"
             />
           </div>
-          <button type="submit" className="w-full mt-4 bg-white hover:bg-neutral-200 text-black font-bold py-4 rounded-xl transition-all transform hover:-translate-y-1">
+          <button type="submit" className="w-full mt-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-4 rounded-xl transition-colors shadow-sm">
             Create User
           </button>
         </form>

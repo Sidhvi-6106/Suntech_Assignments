@@ -14,28 +14,13 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const frontendDistPath = path.join(__dirname, "..", "frontend", "dist");
 
-// Improved Origin Logic: Fallback to common dev ports if env is missing
-const allowedOrigins = process.env.CLIENT_ORIGIN 
-  ? process.env.CLIENT_ORIGIN.split(",").map(o => o.trim()) 
-  : ["http://localhost:5173", "http://localhost:5175", "http://localhost:3000"];
-
-app.set("trust proxy", 1);
-
-// Simplified CORS for reliability
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps or curl) 
-      // or if the origin is in our allow list
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("CORS origin is not allowed"));
-      }
-    },
+    origin:
+      process.env.CLIENT_URL ||
+      "http://localhost:5174",
+
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"]
   })
 );
 
@@ -46,6 +31,10 @@ app.use("/user-api", UserApp);
 
 app.get("/health", (req, res) => {
   res.status(200).json({ message: "Server is running" });
+});
+
+app.get("/", (req, res) => {
+  res.send("Backend Running Successfully");
 });
 
 // Production Static Files
