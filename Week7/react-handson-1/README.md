@@ -1,16 +1,46 @@
-# React + Vite
+# React Hands-on Assignment (Week 7)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A dynamic web application built using **React** and **Vite**. This project focuses on implementing fundamental React concepts, structural component design, and efficient state management.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Getting Started
 
-## React Compiler
+Follow these steps to set up and run the project locally.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 1. Clone the Repository
 
-## Expanding the ESLint configuration
+git clone [https://github.com/Sidhvi-6106/Suntech_Assignments.git](https://github.com/Sidhvi-6106/Suntech_Assignments.git)
+cd Suntech_Assignments/Week7/react-handson-1
+2. Install Dependencies
+Install the required packages using npm:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Bash
+npm install
+3. Run the Development Server
+Start the local development server with Hot Module Replacement (HMR):
+
+Bash
+npm run dev
+Once started, open your browser and navigate to the local URL provided in your terminal (usually http://localhost:5173).
+
+4. Build for Production
+To create an optimized production build:
+
+Bash
+npm run build
+🛠️ Tech Stack & Features
+Framework: React (Functional components and Hooks)
+
+Build Tool: Vite for ultra-fast bundling and performance
+
+Linting: ESLint for code quality assurance
+
+Key Implementation Details
+💡 Assignment Highlights:
+
+Handled modular component creation and structured file layouts.
+
+Managed reactive UI rendering using built-in React states (useState, useEffect).
+
+Configured strict linting rules to maintain clean, professional-grade code patterns.
