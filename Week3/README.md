@@ -1,51 +1,156 @@
+```markdown
+# Suntech Assignments - Week 3: Modular Blog Application Backend
 
-## 🚀 Setup & Initialization
+Welcome to the documentation for the Week 3 core assignment. This week shifted focus from local simulations entirely into enterprise-grade **Backend Server Architecture**. We constructed a fully scalable, secure, and modular REST API backend for a **Blog Application** using Node.js, Express, and Mongoose (MongoDB).
 
-### 1. Initialize Git Repository
+---
+
+## 📂 Backend Project Folder Structure
+
+The backend follows a strict **Layered Architecture Pattern** to enforce separation of concerns, ensuring that database logic, routing mechanisms, and business validations never conflict:
+
+```text
+Blog_app_backend/
+├── APIs/               # Routing Layer (Defines HTTP endpoints & interfaces)
+│   ├── user.api.js     # User registration, login, and profile endpoints
+│   ├── author.api.js   # Author-specific operational routes
+│   └── blog.api.js     # Blog CRUD operations & comment streams
+├── middlewares/        # Interceptor Layer (Request preprocessing & safety checks)
+│   ├── bodyParser.js   # Custom/configured incoming payload parsers
+│   └── errorHandler.js # Centralized catch-all global error interceptor
+├── models/             # Data Layer (Database Schemas & Data Constraints)
+│   ├── user.model.js   # MongoDB User schema structure
+│   ├── author.model.js # MongoDB Author schema structure
+│   └── blog.model.js   # MongoDB Blog post & nested comments schema
+├── services/           # Business Logic Layer (Shared routines & helpers)
+│   └── auth.service.js # Reusable validation, hashing, and token generation
+├── .env                # Controlled Environment Configurations (Hidden locally)
+├── .gitignore          # Prevents pushing node_modules/ and secrets to GitHub
+├── package.json        # Project metadata, ES Module declarations, & dependencies
+├── req.http            # Local HTTP client file for rapid endpoint testing
+└── server.js           # Main Entry Point (Bootstraps Express & DB connections)
+
+```
+
+---
+
+## 🛠️ Architectural Layers & Workflow Design
+
+```mermaid
+graph LR
+    Client((HTTP Client)) --> Server[server.js]
+    Server --> Middlewares[Middlewares Layer]
+    Middlewares --> APIs[APIs Routing Layer]
+    APIs --> Services[Shared Services Layer]
+    Services --> Models[Mongoose Models Layer]
+    Models --> DB[(MongoDB Database)]
+
+```
+
+### 1. The Bootstrapper (`server.js`)
+
+Acts as the central gateway of the application. It loads environment-specific parameters via `dotenv`, initializes the Express app, establishes a persistent connection to MongoDB using Mongoose, and binds global middleware utilities.
+
+### 2. Schemas & Models Layer (`models/`)
+
+Defines the strict structural integrity of database documents using Mongoose.
+
+* **User & Author Collections:** Enforces mandatory fields, strict data types, unique constraints (e.g., uniqueness on email properties), and default values.
+* **Blog Post Matrix:** Configured to cleanly host arrays of nested comment schemas or object relationships, establishing structural connectivity between authors and posts.
+
+### 3. Reusable Shared Services Layer (`services/`)
+
+Built explicitly around the **DRY (Don't Repeat Yourself)** engineering principle.
+
+* **Role-Based Authentication Engine:** Instead of duplicating sensitive code like password validation across separate files for Users, Authors, and Admins, a centralized service processes registration, token handshakes, and credentials universally based on dynamic incoming roles.
+
+### 4. Custom Middlewares (`middlewares/`)
+
+Maintains runtime health and filters incoming payloads before they hit business routing:
+
+* **Body Parsers:** Standardizes inbound traffic via `express.json()` and url-encoded processors.
+* **Global Error Handler:** A unified wrapper middleware. Whenever an exception occurs across any route, it bypasses standard server crashes, logs the anomaly, and returns an elegant, human-readable JSON error payload back to the client.
+
+### 5. API Routing Layer (`APIs/`)
+
+Exposes structured RESTful resource paths using specific HTTP verbs to govern data manipulation cleanly:
+
+* `GET`: Retrieves data indexes or specific singular resource IDs.
+* `POST`: Creates new database entries securely.
+* `PUT`/`PATCH`: Modifies historical properties dynamically.
+* `DELETE`: Safely expunges targeted assets from the ecosystem.
+
+---
+
+## 🚀 Setup & Initialization Guide
+
+Follow these steps to initialize and spin up the development environment from scratch:
+
+### 1. Clone & Core Configuration
+
+Initialize your environment tracker files and prevent pushing vulnerabilities:
+
+```bash
 git init
-2. Configure Environment Variables
-Create a .env file in the root directory to store sensitive data (e.g., database URIs, ports, private keys).
+touch .env .gitignore
 
-Add a .gitignore file to ensure the .env file and node_modules are not pushed to GitHub.
+```
 
-Install dotenv to manage environment configurations:
+Add standard configurations inside your `.gitignore`:
 
-Bash
-npm install dotenv
-3. Initialize Node.js Project
-Generate your package.json file and install Express:
+```text
+node_modules/
+.env
 
-Bash
+```
+
+### 2. Dependency Infrastructure
+
+Generate your node environment tracking map and download core ecosystem frameworks:
+
+```bash
 npm init -y
-npm install express
-Configuration Note: Ensure you open your package.json file and add the following properties to support ES modules and define the entry point:
+npm install express mongoose dotenv
 
-JSON
-"type": "module",
-"main": "server.js"
-🛠️ Development & Architecture Flow
-4. Create the Express Server
-Set up your core server.js file to initialize the Express application, listen on your designated port, and process incoming traffic.
+```
 
-5. Connect to the Database
-Install Mongoose to interact with MongoDB seamlessly:
+> ⚠️ **Critical Requirement:** Open the `package.json` file and declare explicit support for modern ES Modules alongside the primary script target:
+> ```json
+> "type": "module",
+> "main": "server.js"
+> 
+> ```
+> 
+> 
 
-Bash
-npm install mongoose
-6. Implement Middlewares
-Configure global and route-specific middlewares to handle incoming requests securely and efficiently:
+### 3. Running the Server
 
-Body Parser: Built-in Express middleware (express.json() and express.urlencoded()) to handle parsing request bodies.
+To execute and run the backend system, call the central entrypoint via node:
 
-Error Handlers: Centralized error-handling middleware to gracefully catch and format application errors.
+```bash
+node server.js
 
-7. Design Schemas & Models
-Define robust MongoDB schemas using Mongoose to structure application data for users, authors, blogs, and comments.
+```
 
-8. Create Reusable Services (Authentication & Shared Logic)
-💡 Architectural Note: To keep the codebase DRY (Don't Repeat Yourself), separate shared logic into a distinct Service Layer.
+### 4. API Testing Protocol
 
-Instead of duplicating authentication routines for Authors, Users, and Admins, create a unified authentication/user service that can adapt based on roles. This simplifies route handling and improves maintainability.
+You can test each API endpoint locally without launching an interface tool by utilizing the `req.http` file integrated within the directory via any popular HTTP extension client.
 
-9. Design REST APIs
-Develop structural RESTful endpoints for all available resources (Users, Authors, Blogs) ensuring proper usage of HTTP methods (GET, POST, PUT, DELETE).
+```http
+### Register User Example
+POST http://localhost:5000/api/users/register
+Content-Type: application/json
+
+{
+  "name": "Sidhvi",
+  "email": "sidhvi@example.com",
+  "password": "SecurePassword123"
+}
+
+```
+
+---
+
+```
+
+```
